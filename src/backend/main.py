@@ -1,10 +1,10 @@
 import uvicorn
 
 from src.backend.core.server import create_app
-from src.backend.db import session
+from db.session import init_db, get_db
 from src.backend.config import config
 
-
+init_db()
 app = create_app()
 
 
