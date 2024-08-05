@@ -22,9 +22,7 @@ class Register(BaseModel):
     email: str
     password_1: str
     password_2: str
-    first_name: str
-    last_name: str
-    phone: str
+    username: str
 
 class PwdResetRequest(BaseModel):
     email: str

@@ -47,12 +47,12 @@ def user_register(data: user_schema.Register, dal: UserDAL = Depends(DALGetter(U
         return response.resp_400(message="Email has been used")
     if not User.verify_confirm_password(data.password_1, data.password_2):
         return response.resp_400(message="Different passwords")
-    if not User.password_check(data.password_1):
-        return response.resp_400(message="Password invalid")
+    # if not User.password_check(data.password_1):
+    #     return response.resp_400(message="Password invalid")
 
     # create new user
-    new_user = dal.create_new_user(dict(email=data.email, first_name=data.first_name, last_name=data.last_name, phone=data.phone, password=User.get_password_hash(data.password_1)))
-    return response.resp_200(data=new_user.id, message="User Register success")
+    new_user = dal.create_new_user(dict(Email=data.email, Username=data.username, Password=User.get_password_hash(data.password_1)))
+    return response.resp_200(data=new_user.UserId, message="User Register success")
 
 
 @router.post("/login", summary="login", description="login")
@@ -61,14 +61,15 @@ def user_login(data: user_schema.Login, dal: UserDAL = Depends(DALGetter(UserDAL
     # error check
     if not user:
         return response.resp_400(message="User not exist (email not registered)")
-    if not User.verify_password(data.password, user.password):
+    if not User.verify_password(data.password, user.Password):
         return response.resp_400(message="Wrong password")
     # create token and login
-    token = security.create_access_token(user_id=user.id, user_role=user.role, expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES))
-    security_key = security.create_security_key(expires_delta=timedelta(minutes=config.SECURITY_KEY_EXPIRE_MINUTES))
+    # token = security.create_access_token(user_id=user.UserId, user_role=user.role, expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES))
+    # security_key = security.create_security_key(expires_delta=timedelta(minutes=config.SECURITY_KEY_EXPIRE_MINUTES))
 
-    dal.update_profile({"recent_log": get_aus_time_str() + "+"}, user.id)
-    return response.resp_200(data=dict(token=token, user=user, security_key=security_key), message="Login success")
+    # dal.update_profile({"recent_log": get_aus_time_str() + "+"}, user.id)
+    # return response.resp_200(data=dict(token=token, user=user, security_key=security_key), message="Login success")
+    return response.resp_200(data=user.UserId, message="Login success")
 
 
 @router.get("/logout", summary="logout", description="logout", dependencies=[Depends(get_user)])
@@ -97,10 +98,10 @@ def profile_update(data: user_schema.Update, user: User = Depends(get_user), dal
         return response.resp_400(message="Invalid Email")
     if dal.get_by(email=data.email) and dal.get_by(email=data.email).id != user.id:
         return response.resp_400(message="Email has been used")
-    if not User.verify_phone(data.phone):
-        return response.resp_400(message="Invalid Phone Number")
-    if not User.verify_first_last_name(data.first_name, data.last_name):
-        return response.resp_400(message="Invalid Name")
+    # if not User.verify_phone(data.phone):
+    #     return response.resp_400(message="Invalid Phone Number")
+    # if not User.verify_first_last_name(data.first_name, data.last_name):
+    #     return response.resp_400(message="Invalid Name")
     return response.resp_200(data=dal.update_profile(data, user.id), message='Update profile success')
 
 
@@ -125,8 +126,8 @@ def pwd_reset_reset(data: user_schema.PwdReset, user: User = Depends(get_user), 
 
     if not User.verify_password(data.password_old, user.password):
         return response.resp_400(message="Wrong password")
-    if not User.password_check(data.password_1):
-        return response.resp_400(message="Password invalid")
+    # if not User.password_check(data.password_1):
+    #     return response.resp_400(message="Password invalid")
     if not User.verify_confirm_password(data.password_1, data.password_2):
         return response.resp_400(message="Different passwords")
     # update password
@@ -156,8 +157,8 @@ def pwd_reset_reset(data: user_schema.PwdResetReset, dal: UserDAL = Depends(DALG
     # error check
     if not data.reset_code_input == data.reset_code_generate:
         return response.resp_400(message="Wrong reset code")
-    if not User.password_check(data.password_1):
-        return response.resp_400(message="Password invalid")
+    # if not User.password_check(data.password_1):
+    #     return response.resp_400(message="Password invalid")
     if not User.verify_confirm_password(data.password_1, data.password_2):
         return response.resp_400(message="Different passwords")
     user = dal.get_by(email=data.email)

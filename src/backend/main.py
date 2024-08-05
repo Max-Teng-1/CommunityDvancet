@@ -1,7 +1,7 @@
 import uvicorn
 
 from src.backend.core.server import create_app
-from db.session import init_db, get_db
+from src.backend.db.session import init_db, get_db
 from src.backend.config import config
 
 init_db()

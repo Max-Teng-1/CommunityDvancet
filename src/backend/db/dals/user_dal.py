@@ -17,7 +17,7 @@ class UserOtherDAL:
     def get(cls, user_id: str, ) -> User:
         session = next(get_db())
         try:
-            q = session.execute(select(User).where(User.id == int(user_id)))
+            q = session.execute(select(User).where(User.UserId == int(user_id)))
             user = q.scalar()
             return user
 
@@ -35,20 +35,20 @@ class UserDAL:
 
     def get_by(self, *, email: str = None, user_id: int = None, role: int = None) -> User:
         if email:
-            stmt = select(User).where(User.email == email)
+            stmt = select(User).where(User.Email == email)
         elif user_id:
-            stmt = select(User).where(User.id == user_id)
+            stmt = select(User).where(User.UserId == user_id)
         elif role:
-            stmt = select(User).where(User.role == role)
+            stmt = select(User).where(User.RoleId == role)
         else:
             raise custom_exc.EnumException()
         q = self.session.execute(stmt)
         return q.scalar()
 
-    def get_all_admin(self):
-        stmt = select(User).where(User.role >= config.ADMIN)
-        q = self.session.execute(stmt)
-        return q.scalars().all()
+    # def get_all_admin(self):
+    #     stmt = select(User).where(User.RoleId >= config.ADMIN)
+    #     q = self.session.execute(stmt)
+    #     return q.scalars().all()
 
     def get_all_user(self) -> List[User]:
         stmt = select(User)
@@ -62,42 +62,42 @@ class UserDAL:
         return obj
 
     def delete_user(self, user_id: int):
-        self.session.query(User).filter(User.id == user_id).delete()
+        self.session.query(User).filter(User.UserId == user_id).delete()
         self.session.commit()
 
     def update_user_role(self, user_id: int, role: int):
-        self.session.query(User).filter(User.id == user_id).update({"role": role})
+        self.session.query(User).filter(User.UserId == user_id).update({"RoleId": role})
         self.session.commit()
         updated_user = self.get_by(user_id=user_id)
         return updated_user
 
     def update_profile(self, user: Union[user_schema.Update, Dict], user_id: int):
         update_info = User(**user) if isinstance(user, dict) else User(**user.dict())
-        self.session.query(User).filter(User.id == user_id).update({"first_name": update_info.first_name, "last_name": update_info.last_name, "phone": update_info.phone, "email": update_info.email, "recent_log": update_info.recent_log})
+        self.session.query(User).filter(User.UserId == user_id).update({"Username": update_info.username, "Gender": update_info.gender, "Birthday": update_info.birthday, "Email": update_info.email, "UpdateTime": update_info.update_time})
         self.session.commit()
         updated_user = self.get_by(user_id=user_id)
         return updated_user
 
     def update_password(self, password: str, user_id: int):
-        self.session.query(User).filter(User.id == user_id).update({"password": User.get_password_hash(password)})
+        self.session.query(User).filter(User.UserId == user_id).update({"Password": User.get_password_hash(password)})
         self.session.commit()
         updated_user = self.get_by(user_id=user_id)
         return updated_user
     
-    def update_avatar(self, avatar: str, user_id: int):
-        self.session.query(User).filter(User.id == user_id).update({"avatar": avatar})
-        self.session.commit()
-        updated_user = self.get_by(user_id=user_id)
-        return updated_user
+    # def update_avatar(self, avatar: str, user_id: int):
+    #     self.session.query(User).filter(User.UserId == user_id).update({"avatar": avatar})
+    #     self.session.commit()
+    #     updated_user = self.get_by(user_id=user_id)
+    #     return updated_user
 
     def set_admin(self, user_id: int):
-        self.session.query(User).filter(User.id == user_id).update({"role": config.ADMIN})
+        self.session.query(User).filter(User.UserId == user_id).update({"role": config.ADMIN})
         self.session.commit()
         updated_user = self.get_by(user_id=user_id)
         return updated_user
     
     def lock_user(self, user_id: int):
-        self.session.query(User).filter(User.id == user_id).update({"is_locked": True})
+        self.session.query(User).filter(User.UserId == user_id).update({"is_locked": True})
         self.session.commit()
         updated_user = self.get_by(user_id=user_id)
         return updated_user

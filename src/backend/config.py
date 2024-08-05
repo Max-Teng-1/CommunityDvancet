@@ -8,7 +8,7 @@ class Config(BaseSettings):
     # database setting
     MYSQL_USERNAME: str = "testuser"
     MYSQL_PASSWORD: str = "Allen123456"
-    MYSQL_HOST: str = "1.2.3.4"
+    MYSQL_HOST: str = "127.0.0.1"
     MYSQL_PORT: int = 3306
     MYSQL_DATABASE: str = "testdb"
 

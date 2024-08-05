@@ -1,8 +1,14 @@
 # backend/db/models/user.py
+import re
+from passlib.context import CryptContext
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base
 
+from src.backend.config import config
+
+
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 class User(Base):
     __tablename__ = 'users'
@@ -21,3 +27,35 @@ class User(Base):
     password_recoveries = relationship("PasswordRecovery", back_populates="user")
     comments = relationship("Comment", back_populates="user")
     campaigns = relationship("Campaign", back_populates="owner")
+
+    @staticmethod
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        """
+        verify password
+        :param plain_password: entered password
+        :param hashed_password: hashed stored password
+        :return:
+
+        """
+        return pwd_context.verify(plain_password, hashed_password)
+
+    @staticmethod
+    def get_password_hash(password: str) -> str:
+        """
+        get hashed password
+        :param password:
+        :return:
+        """
+        return pwd_context.hash(password)
+
+    @staticmethod
+    def verify_email_regex(email: str):
+        """
+        :param email
+        :return:
+        """
+        return re.fullmatch(config.EMAIL_REGEX, email)
+
+    @staticmethod
+    def verify_confirm_password(password_1: str, password_2: str):
+        return password_1 == password_2
