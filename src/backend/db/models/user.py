@@ -16,7 +16,7 @@ class User(Base):
     UserId = Column(Integer, primary_key=True, index=True)
     Username = Column(String)
     Password = Column(String)
-    RoleId = Column(Integer, ForeignKey('roles.RoleId'))
+    RoleId = Column(Integer, ForeignKey('roles.RoleId', use_alter= True, name='fk_user_role'))
     Gender = Column(Integer)
     Birthday = Column(DateTime)
     Email = Column(String, unique=True, index=True)

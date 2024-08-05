@@ -18,7 +18,7 @@ class Campaign(Base):
     Status = Column(String)
     CreateTime = Column(DateTime)
     UpdateTime = Column(DateTime)
-    OwnerId = Column(Integer, ForeignKey('users.UserId'))
+    OwnerId = Column(Integer, ForeignKey('users.UserId',use_alter=True, name='fk_campaignOwner'))
 
     owner = relationship("User", back_populates="campaigns")
     comments = relationship("Comment", back_populates="campaign")
