@@ -25,8 +25,8 @@ class User(Base):
 
     role = relationship("Role", back_populates="users")
     password_recoveries = relationship("PasswordRecovery", back_populates="user")
-    comments = relationship("Comment", back_populates="user")
-    campaigns = relationship("Campaign", back_populates="owner")
+    comments = relationship("Comment", back_populates="user", foreign_keys="[Comment.UserId]")
+    campaigns = relationship("Campaign", back_populates="owner", foreign_keys="[Campaign.OwnerId]")
 
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:

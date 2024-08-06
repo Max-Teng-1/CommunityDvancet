@@ -12,5 +12,5 @@ class Comment(Base):
     CommentText = Column(String)
     CreateTime = Column(DateTime)
 
-    campaign = relationship("Campaign", back_populates="comments")
-    user = relationship("User", back_populates="comments")
+    campaign = relationship("Campaign", back_populates="comments", foreign_keys="[Comment.CampaignId]")
+    user = relationship("User", back_populates="comments", foreign_keys="[Comment.UserId]")

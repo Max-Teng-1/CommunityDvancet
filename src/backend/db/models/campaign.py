@@ -21,4 +21,4 @@ class Campaign(Base):
     OwnerId = Column(Integer, ForeignKey('users.UserId',use_alter=True, name='fk_campaignOwner'))
 
     owner = relationship("User", back_populates="campaigns")
-    comments = relationship("Comment", back_populates="campaign")
+    comments = relationship("Comment", back_populates="campaign", foreign_keys="[Comment.CampaignId]")

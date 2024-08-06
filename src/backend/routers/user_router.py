@@ -1,5 +1,5 @@
 import random
-from datetime import timedelta
+from datetime import timedelta, datetime
 from fastapi import APIRouter, Depends, File, UploadFile, Response
 
 from src.backend.config import config
@@ -47,12 +47,17 @@ def user_register(data: user_schema.Register, dal: UserDAL = Depends(DALGetter(U
         return response.resp_400(message="Email has been used")
     if not User.verify_confirm_password(data.password_1, data.password_2):
         return response.resp_400(message="Different passwords")
-    # if not User.password_check(data.password_1):
-    #     return response.resp_400(message="Password invalid")
 
     # create new user
-    new_user = dal.create_new_user(dict(Email=data.email, Username=data.username, Password=User.get_password_hash(data.password_1)))
+    new_user = dal.create_new_user(dict(
+        Email=data.email,
+        Username=data.username,
+        Password=User.get_password_hash(data.password_1),
+        CreateTime=datetime.utcnow(),  # Add creation time
+        UpdateTime=datetime.utcnow()   # Add update time
+    ))
     return response.resp_200(data=new_user.UserId, message="User Register success")
+
 
 
 @router.post("/login", summary="login", description="login")
@@ -64,12 +69,12 @@ def user_login(data: user_schema.Login, dal: UserDAL = Depends(DALGetter(UserDAL
     if not User.verify_password(data.password, user.Password):
         return response.resp_400(message="Wrong password")
     # create token and login
-    # token = security.create_access_token(user_id=user.UserId, user_role=user.role, expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES))
+    token = security.create_access_token(user_id=user.UserId, user_role=user.role, expires_delta=timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES))
     # security_key = security.create_security_key(expires_delta=timedelta(minutes=config.SECURITY_KEY_EXPIRE_MINUTES))
 
     # dal.update_profile({"recent_log": get_aus_time_str() + "+"}, user.id)
     # return response.resp_200(data=dict(token=token, user=user, security_key=security_key), message="Login success")
-    return response.resp_200(data=user.UserId, message="Login success")
+    return response.resp_200(data=dict(token=token, user=user), message="Login success")
 
 
 @router.get("/logout", summary="logout", description="logout", dependencies=[Depends(get_user)])
