@@ -24,7 +24,7 @@ def datetime_to_str(date: datetime):
 
 
 def send_email(email: str, reset_code: str = None, auto_accept: bool = False):
-    sender_address = 'wangweihanbackup@gmail.com'
+    sender_address = '1435160838@qq.com'
     sender_pass = 'dvytiqcpokknbahd'
     receiver_address = email
     message = MIMEMultipart()
@@ -41,7 +41,7 @@ def send_email(email: str, reset_code: str = None, auto_accept: bool = False):
     image.add_header('Content-ID', '<image_Greater>')
     message.attach(image)
 
-    connection = smtplib.SMTP('smtp.gmail.com', 587)
+    connection = smtplib.SMTP('smtp.qq.com', 587)
 
     connection.starttls()
     connection.login(sender_address, sender_pass)
