@@ -24,8 +24,8 @@ def datetime_to_str(date: datetime):
 
 
 def send_email(email: str, reset_code: str = None, auto_accept: bool = False):
-    sender_address = '123456@gmail.com'
-    sender_pass = '666666'
+    sender_address = 'wangweihanbackup@gmail.com'
+    sender_pass = 'dvytiqcpokknbahd'
     receiver_address = email
     message = MIMEMultipart()
     message['From'] = sender_address

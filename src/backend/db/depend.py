@@ -71,6 +71,6 @@ def get_user(
     if not payload:
         return None
     user = UserOtherDAL.get(user_id=payload.get("UserId"))
-    
+    print(type(user))
     return user
 
