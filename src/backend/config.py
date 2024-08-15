@@ -21,9 +21,9 @@ class Config(BaseSettings):
     REDOC_URL: Optional[str] = "/api/redoc"
 
     # user role
-    NORMAL_USER: int = 1
-    ADMIN: int = 2
-    SUPER_ADMIN: int = 3
+    NORMAL: int = 1
+    BUSINESS: int = 2
+    ADMIN: int = 3
 
     # backend host and port (should be different from mysql host and port)
     PORT: int = 8000

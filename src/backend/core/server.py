@@ -1,6 +1,7 @@
 import traceback
 from fastapi import FastAPI, Request, Response
-from fastapi.exceptions import RequestValidationError, ValidationError
+from pydantic import ValidationError
+from fastapi.exceptions import RequestValidationError
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.errors import ServerErrorMiddleware
 from sqlalchemy.exc import DataError

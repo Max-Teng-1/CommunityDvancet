@@ -23,6 +23,7 @@ class Register(BaseModel):
     password_1: str
     password_2: str
     username: str
+    role: int
 
 class PwdResetRequest(BaseModel):
     email: str

@@ -53,6 +53,7 @@ def user_register(data: user_schema.Register, dal: UserDAL = Depends(DALGetter(U
         Email=data.email,
         Username=data.username,
         Password=User.get_password_hash(data.password_1),
+        RoleId=data.role,
         CreateTime=datetime.utcnow(),  # Add creation time
         UpdateTime=datetime.utcnow()   # Add update time
     ))
