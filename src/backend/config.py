@@ -25,6 +25,11 @@ class Config(BaseSettings):
     BUSINESS: int = 2
     ADMIN: int = 3
 
+    # campaign status
+    PENDING: int = 1
+    APPROVED: int = 2
+    REJECTED: int = 3
+
     # backend host and port (should be different from mysql host and port)
     PORT: int = 8000
     HOST: str = "0.0.0.0"

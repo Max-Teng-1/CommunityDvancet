@@ -7,7 +7,7 @@ class Campaign(Base):
     __tablename__ = 'campaigns'
 
     CampaignId = Column(Integer, primary_key=True, index=True)
-    Name = Column(String)
+    Title = Column(String)
     Description = Column(String)
     ImageUrl = Column(String)
     Category = Column(Integer)

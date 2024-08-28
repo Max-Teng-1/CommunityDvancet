@@ -45,11 +45,6 @@ class UserDAL:
         q = self.session.execute(stmt)
         return q.scalar()
 
-    # def get_all_admin(self):
-    #     stmt = select(User).where(User.RoleId >= config.ADMIN)
-    #     q = self.session.execute(stmt)
-    #     return q.scalars().all()
-
     def get_all_user(self) -> List[User]:
         stmt = select(User)
         q = self.session.execute(stmt)
@@ -83,12 +78,6 @@ class UserDAL:
         self.session.commit()
         updated_user = self.get_by(user_id=user_id)
         return updated_user
-    
-    # def update_avatar(self, avatar: str, user_id: int):
-    #     self.session.query(User).filter(User.UserId == user_id).update({"avatar": avatar})
-    #     self.session.commit()
-    #     updated_user = self.get_by(user_id=user_id)
-    #     return updated_user
 
     def set_admin(self, user_id: int):
         self.session.query(User).filter(User.UserId == user_id).update({"role": config.ADMIN})

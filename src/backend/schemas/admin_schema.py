@@ -7,15 +7,9 @@ class AvailableTime(BaseModel):
     date_end: str
 
 
-class NotificationCreate(BaseModel):
-    car_space_no: str
+class Approve(BaseModel):
+    campaign_id: int
 
-
-
-
-
-
-
-
-
+class Reject(BaseModel):
+    campaign_id: int
 

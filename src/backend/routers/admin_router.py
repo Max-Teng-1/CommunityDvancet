@@ -6,6 +6,7 @@ from src.backend.common import response
 from src.backend.db.depend import DALGetter, get_user
 from src.backend.db.models.user import User
 from src.backend.db.dals.user_dal import UserDAL
+from src.backend.db.dals.campaign_dal import CampaignDAL
 from src.backend.schemas import user_schema
 from src.backend.schemas import admin_schema
 
@@ -52,6 +53,7 @@ def list_user(user: User = Depends(get_user), dal: UserDAL = Depends(DALGetter(U
     users = dal.get_all_user()
     return response.resp_200(data=users, message="List user success")
 
+
 @router.post("/lock", summary="lock a user", description="lock a user")
 def lock_user(data: user_schema.Id, user: User = Depends(get_user), dal: UserDAL = Depends(DALGetter(UserDAL))):
     if not user:
@@ -60,3 +62,23 @@ def lock_user(data: user_schema.Id, user: User = Depends(get_user), dal: UserDAL
         return response.resp_400(message="You are not admin")
     dal.lock_user(data.id)
     return response.resp_200(message="Lock success")
+
+
+@router.put("/approve", summary="approve a campaign", description="approve a campaign")
+def approve_campaign(data: admin_schema.Approve, user: User = Depends(get_user), dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
+    if not user:
+        return response.resp_401(message="Your account has expired, Please log in again")
+    if user.role < config.ADMIN:
+        return response.resp_400(message="You are not admin")
+    dal.approve_campaign(data.campaign_id)
+    return response.resp_200(message="Campaign approve success")
+
+@router.put("/reject", summary="reject a campaign", description="reject a campaign")
+def reject_campaign(data: admin_schema.Reject, user: User = Depends(get_user), dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
+    if not user:
+        return response.resp_401(message="Your account has expired, Please log in again")
+    if user.role < config.ADMIN:
+        return response.resp_400(message="You are not admin")
+    dal.reject_campaign(data.campaign_id)
+    return response.resp_200(message="Campaign reject success")
+
