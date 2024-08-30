@@ -25,7 +25,8 @@ def create_campaign(data: campaign_schema.Campaign, user: User = Depends(get_use
         OwnerId=user.UserId,
         Status=config.PENDING,
         CreateTime=datetime.utcnow(),
-        UpdateTime=datetime.utcnow()
+        UpdateTime=datetime.utcnow(),
+        Likes=0,
     ))
     return response.resp_200(data=campaign.CampaignId, message="Campaign create success")
 
@@ -55,13 +56,13 @@ def update_campaign(data: campaign_schema.Update, user: User = Depends(get_user)
 def delete_campaign(data: campaign_schema.Delete, user: User = Depends(get_user), dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
     if not user:
         return response.resp_401(message="Your account has expired, Please log in again")
-    dal.delete_campaign(data.campaign_id)
+    dal.delete_campaign(campaign_id=data.campaign_id)
     return response.resp_200(message="Campaign delete success")
 
 @router.put("/like", summary="like a campaign", description="like a campaign")
-def like_campaign(data: campaign_schema.Get, user: User = Depends(get_user), dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
+def like_campaign(data: campaign_schema.Like, user: User = Depends(get_user), dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
     if not user:
         return response.resp_401(message="Your account has expired, Please log in again")
-    dal.like_campaign(data.campaign_id)
+    dal.like_campaign(campaign_id=data.campaign_id)
     return response.resp_200(message="Campaign like success")
 

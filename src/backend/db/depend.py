@@ -70,7 +70,10 @@ def get_user(
     """
     if not payload:
         return None
-    user = UserOtherDAL.get(user_id=payload.get("UserId"))
-    print(type(user))
+    if not payload.get("user_id"):
+        print("no user id")
+        return False
+    user = UserOtherDAL.get(user_id=payload.get("user_id"))
+    # print(type(user))
     return user
 

@@ -52,7 +52,9 @@ class CampaignDAL:
         stmt = select(Campaign).where(Campaign.CampaignId == campaign_id)
         q = self.session.execute(stmt)
         obj = q.scalar()
-        obj.Like += 1
+        # print(obj)
+        # print(obj.Likes)
+        obj.Likes += 1
         self.session.merge(obj)
         self.session.commit()
         return obj

@@ -23,3 +23,7 @@ class Reject(BaseModel):
 
 class Delete(BaseModel):
     campaign_id: int
+
+class Like(BaseModel):
+    campaign_id: int
+

@@ -111,17 +111,17 @@ def profile_update(data: user_schema.Update, user: User = Depends(get_user), dal
     return response.resp_200(data=dal.update_profile(data, user.id), message='Update profile success')
 
 
-@router.post("/profile/avatar/update", summary="update avatar of user", description="update avatar of user")
-async def create_upload_file(user: User = Depends(get_user), dal: UserDAL = Depends(DALGetter(UserDAL)), file: UploadFile = File(...)):
-    # error check
-    if not user:
-        return response.resp_401(message="Your account has expired, Please log in again")
-    try:
-        with open(config.USER_AVATAR_PATH + f"{user.id}.png", "wb") as buffer:
-            buffer.write(await file.read())
-    except Exception:
-        return response.resp_400(message="Upload avatar failed")
-    return response.resp_200(data=dal.update_avatar(config.USER_AVATAR_PATH + f"{user.id}.png", user.id), message="Update avatar success")
+# @router.post("/profile/avatar/update", summary="update avatar of user", description="update avatar of user")
+# async def create_upload_file(user: User = Depends(get_user), dal: UserDAL = Depends(DALGetter(UserDAL)), file: UploadFile = File(...)):
+#     # error check
+#     if not user:
+#         return response.resp_401(message="Your account has expired, Please log in again")
+#     try:
+#         with open(config.USER_AVATAR_PATH + f"{user.id}.png", "wb") as buffer:
+#             buffer.write(await file.read())
+#     except Exception:
+#         return response.resp_400(message="Upload avatar failed")
+#     return response.resp_200(data=dal.update_avatar(config.USER_AVATAR_PATH + f"{user.id}.png", user.id), message="Update avatar success")
 
 
 @router.post("/profile/password/reset", summary="reset pwd", description="reset pwd")
