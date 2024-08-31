@@ -14,11 +14,11 @@ from src.backend.routers.helper import send_email, get_aus_time_str
 
 router = APIRouter()
 
-@router.get("/token/authantication", summary="authantication", description="authantication")
+@router.get("/token/authentication", summary="authentication", description="authentication")
 def token_authantication(user: User = Depends(get_user)):
     if not user:
         return response.resp_401(message="Your account has expired, Please log in again")
-    return response.resp_200(data=user, message="Authantication success")
+    return response.resp_200(data=user, message="Authentication success")
 
 # @router.post("/security_key/verify", summary="check whether security key expired", description="check whether security key expired")
 # def security_verify(data: user_schema.SecurityKey, user: User = Depends(get_user)):
