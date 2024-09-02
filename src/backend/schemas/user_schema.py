@@ -44,11 +44,9 @@ class Id(BaseModel):
     id: int
 
 class Update(BaseModel):
-    email: str
-    first_name: str
-    last_name: str
-    phone: str
-    email_notification: bool
+    gender: str
+    birthday: str
+    avatar: str
 
 class SecurityKey(BaseModel):
     security_key: str

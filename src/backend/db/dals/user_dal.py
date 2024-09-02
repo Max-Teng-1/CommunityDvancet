@@ -68,7 +68,7 @@ class UserDAL:
 
     def update_profile(self, user: Union[user_schema.Update, Dict], user_id: int):
         update_info = User(**user) if isinstance(user, dict) else User(**user.dict())
-        self.session.query(User).filter(User.UserId == user_id).update({"Username": update_info.username, "Gender": update_info.gender, "Birthday": update_info.birthday, "Email": update_info.email, "UpdateTime": update_info.update_time})
+        self.session.query(User).filter(User.UserId == user_id).update({"Gender": update_info.gender, "Birthday": update_info.birthday, "Avatar": update_info.avatar, "UpdateTime": update_info.update_time})
         self.session.commit()
         updated_user = self.get_by(user_id=user_id)
         return updated_user

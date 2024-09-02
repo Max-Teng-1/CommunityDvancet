@@ -100,15 +100,15 @@ def profile_update(data: user_schema.Update, user: User = Depends(get_user), dal
     if not user:
         return response.resp_401(message="Your account has expired, Please log in again")
 
-    if not User.verify_email_regex(data.email):
-        return response.resp_400(message="Invalid Email")
-    if dal.get_by(email=data.email) and dal.get_by(email=data.email).id != user.id:
-        return response.resp_400(message="Email has been used")
-    # if not User.verify_phone(data.phone):
-    #     return response.resp_400(message="Invalid Phone Number")
-    # if not User.verify_first_last_name(data.first_name, data.last_name):
-    #     return response.resp_400(message="Invalid Name")
-    return response.resp_200(data=dal.update_profile(data, user.id), message='Update profile success')
+    # update profile
+    new_user = dal.update_profile(data, dict(
+        Gender=data.gender,
+        Birthday=data.birthday,
+        Avatar=data.avatar,
+        UpdateTime=datetime.utcnow()
+    ), user.UserId)
+    
+    return response.resp_200(data=new_user, message='Update profile success')
 
 
 # @router.post("/profile/avatar/update", summary="update avatar of user", description="update avatar of user")

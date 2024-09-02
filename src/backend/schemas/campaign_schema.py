@@ -9,6 +9,12 @@ class Campaign(BaseModel):
 class Get(BaseModel):
     campaign_id: int
 
+class Status(BaseModel):
+    status: int
+
+class Owner(BaseModel):
+    owner_id: int
+
 class Update(BaseModel):
     campaign_id: int
     title: str

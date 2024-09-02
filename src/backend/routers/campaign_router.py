@@ -35,10 +35,15 @@ def get_campaign(data: campaign_schema.Get, dal: CampaignDAL = Depends(DALGetter
     campaign = dal.get_by(campaign_id=data.campaign_id)
     return response.resp_200(data=campaign, message="Campaign get success")
 
-@router.get("/get_all", summary="get all campaigns", description="get all campaigns")
-def get_all_campaign(dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
-    campaigns = dal.get_all_campaign()
+@router.get("/get_all_by_status", summary="get all campaigns", description="get all campaigns")
+def get_all_campaign(data: campaign_schema.Status, dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
+    campaigns = dal.get_all_campaign_by_status(status=data.status)
     return response.resp_200(data=campaigns, message="Campaign get all success")
+
+@router.get("/get_all_by_owner", summary="get all campaigns by owner", description="get all campaigns by owner")
+def get_all_campaign_by_owner(data: campaign_schema.Owner, dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):
+    campaigns = dal.get_all_campaign_by_owner(owner_id=data.owner_id)
+    return response.resp_200(data=campaigns, message="Campaign get all by owner success")
 
 @router.put("/update", summary="update a campaign", description="update a campaign")
 def update_campaign(data: campaign_schema.Update, user: User = Depends(get_user), dal: CampaignDAL = Depends(DALGetter(CampaignDAL))):

@@ -25,8 +25,13 @@ class CampaignDAL:
         q = self.session.execute(stmt)
         return q.scalar()
 
-    def get_all_campaign(self) -> List[Campaign]:
-        stmt = select(Campaign)
+    def get_all_campaign_by_status(self, status) -> List[Campaign]:
+        stmt = select(Campaign).where(Campaign.Status == status)
+        q = self.session.execute(stmt)
+        return q.scalars().all()
+
+    def get_all_campaign_by_owner(self, owner_id) -> List[Campaign]:
+        stmt = select(Campaign).where(Campaign.OwnerId == owner_id)
         q = self.session.execute(stmt)
         return q.scalars().all()
 

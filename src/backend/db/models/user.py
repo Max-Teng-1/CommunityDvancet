@@ -19,6 +19,7 @@ class User(Base):
     RoleId = Column(Integer, ForeignKey('roles.RoleId', use_alter= True, name='fk_user_role'))
     Gender = Column(Integer)
     Birthday = Column(DateTime)
+    Avatar = Column(String)
     Email = Column(String, unique=True, index=True)
     CreateTime = Column(DateTime)
     UpdateTime = Column(DateTime)
