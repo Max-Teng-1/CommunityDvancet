@@ -17,7 +17,7 @@ class User(Base):
     Username = Column(String)
     Password = Column(String)
     RoleId = Column(Integer, ForeignKey('roles.RoleId', use_alter= True, name='fk_user_role'))
-    Avatar = Column(String, default="\CommunityDvancet\src\backend\static\userAvatar\default.png")
+    Avatar = Column(String, default=r"\CommunityDvancet\src\backend\static\userAvatar\default.png")
     Email = Column(String, unique=True, index=True)
     CreateTime = Column(DateTime)
     UpdateTime = Column(DateTime)
