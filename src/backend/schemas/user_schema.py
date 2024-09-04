@@ -44,8 +44,6 @@ class Id(BaseModel):
     id: int
 
 class Update(BaseModel):
-    gender: str
-    birthday: str
     avatar: str
 
 class SecurityKey(BaseModel):

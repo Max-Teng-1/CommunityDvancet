@@ -102,8 +102,6 @@ def profile_update(data: user_schema.Update, user: User = Depends(get_user), dal
 
     # update profile
     new_user = dal.update_profile(data, dict(
-        Gender=data.gender,
-        Birthday=data.birthday,
         Avatar=data.avatar,
         UpdateTime=datetime.utcnow()
     ), user.UserId)
