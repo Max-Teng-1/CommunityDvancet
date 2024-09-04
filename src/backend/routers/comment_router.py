@@ -35,9 +35,16 @@ def get_comment(data: comment_schema.Get, dal: CommentDAL = Depends(DALGetter(Co
     return response.resp_200(data=comment, message="Comment get success")
 
 @router.get("/get_by_campaign", summary="get all comments by campaign", description="get all comments by campaign")
-def get_comment_by_campaign(data: comment_schema.GetByCampaign, dal: CommentDAL = Depends(DALGetter(CommentDAL))):
-    comments = dal.get_by(campaign_id=data.campaign_id)
-    return response.resp_200(data=comments, message="Comment get by campaign success")
+def get_comment_by_campaign(data: comment_schema.GetByCampaign, dal_comment: CommentDAL = Depends(DALGetter(CommentDAL)), dal_user: UserDAL = Depends(DALGetter(UserDAL))):
+    comments = dal_comment.get_by_campaign(campaign_id=data.campaign_id)
+    dict_comments = []
+    for comment in comments:
+        dict_comment = comment.__dict__
+        dict_comment["Avatar"] = dal_user.get_by(user_id=comment.UserId).Avatar
+        dict_comment["Username"] = dal_user.get_by(user_id=comment.UserId).Username
+        dict_comments.append(dict_comment)
+    sorted_comments = sorted(dict_comments, key=lambda x: x["CreateTime"], reverse=True)
+    return response.resp_200(data=sorted_comments, message="Comment get by campaign success")
 
 @router.get("/get_all", summary="get all comments", description="get all comments")
 def get_all_comment(dal: CommentDAL = Depends(DALGetter(CommentDAL))):

@@ -13,15 +13,18 @@ class CommentDAL:
     def __init__(self, db_session):
         self.session = db_session
 
-    def get_by(self, *, comment_id: int = None, campaign_id: int = None) -> Comment:
+    def get_by(self, *, comment_id: int = None) -> Comment:
         if comment_id:
             stmt = select(Comment).where(Comment.CommentId == comment_id)
-        elif campaign_id:
-            stmt = select(Comment).where(Comment.CampaignId == campaign_id)
         else:
             raise custom_exc.EnumException()
         q = self.session.execute(stmt)
         return q.scalar()
+    
+    def get_by_campaign(self, campaign_id: int) -> List[Comment]:
+        stmt = select(Comment).where(Comment.CampaignId == campaign_id)
+        q = self.session.execute(stmt)
+        return q.scalars().all()
 
     def get_all_comment(self) -> List[Comment]:
         stmt = select(Comment)
